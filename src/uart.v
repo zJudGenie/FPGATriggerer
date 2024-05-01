@@ -8,9 +8,9 @@ module uart
     input uart_rx,
     output uart_tx,
 
-    output reg led,
+    //output reg led,
 
-    output reg byteReady,
+    output reg byte_ready,
     output reg [7:0] reg_data_in
 );
 
@@ -30,11 +30,11 @@ localparam RX_STATE_STOP_BIT = 5;
 always @(posedge clk) begin
     case (rxState)
         RX_STATE_IDLE: begin
+            byte_ready <= 0;
             if (uart_rx == 0) begin
                 rxState <= RX_STATE_START_BIT;
                 rxCounter <= 13'd1;
                 rxBitNumber <= 0;
-                byteReady <= 0;
             end
         end 
         RX_STATE_START_BIT: begin
@@ -64,14 +64,14 @@ always @(posedge clk) begin
             if ((rxCounter + 1) == DELAY_FRAMES) begin
                 rxState <= RX_STATE_IDLE;
                 rxCounter <= 13'd0;
-                byteReady <= 1;
+                byte_ready <= 1;
             end
         end
     endcase
 end
 
 /*always @(posedge clk) begin
-    if (byteReady) begin
+    if (byte_ready) begin
         led <= ~reg_data_in[0];
     end
 end*/

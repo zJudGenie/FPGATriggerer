@@ -20,13 +20,13 @@ Gowin_rPLL pll(
 
 wire [7:0] reg_usb_data_in;
 wire byte_ready;
-wire uart_led;
+//wire uart_led;
 
 uart u(
     clkin,
     uart_rx,
     uart_tx,
-    uart_led,
+    //uart_led,
 
     byte_ready,
     reg_usb_data_in
@@ -39,8 +39,15 @@ reg  [7:0]  reg_data_out;
 wire        reg_read;
 wire        reg_write;
 
-wire [7:0]  data_read;
-always @(posedge clkin) reg_data_out <= data_read;
+wire [7:0]  data_read_1;
+wire [7:0]  data_read_2;
+always @(posedge clkin) begin
+    reg_data_out <= data_read_1 | data_read_2;
+end
+
+wire [5:0] debug_led;
+wire [5:0] dummy_led;
+wire [5:0] dummy_led1;
 
 cmd_handler cmd_reader(
     clkin,
@@ -55,10 +62,12 @@ cmd_handler cmd_reader(
     reg_data_in,
     reg_data_out,
     reg_read,
-    reg_write
+    reg_write,
+
+    dummy_led
 );
 
-wire [5:0] edge_detect_led;
+wire trigger_in;
 
 digital_edge_detector sampler(
     reset,
@@ -70,14 +79,32 @@ digital_edge_detector sampler(
     reg_cmd,
     reg_bytecount,
     reg_data_in,
-    data_read,
+    data_read_1,
+    reg_read,
+    reg_write,
+
+    trigger_in,
+    dummy_led1
+);
+
+delay_module delayer(
+    reset,
+
+    clkin_pll,
+    trigger_in,
+
+    clkin,
+    reg_cmd,
+    reg_bytecount,
+    reg_data_in,
+    data_read_2,
     reg_read,
     reg_write,
 
     trigger_out,
-    edge_detect_led
+    debug_led
 );
 
-assign led = edge_detect_led;
+assign led = debug_led;
 
 endmodule

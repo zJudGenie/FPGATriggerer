@@ -1,11 +1,11 @@
 `timescale 1 ns / 1 ps
 `default_nettype none
-module digital_edge_detector (
+module delay_module (
     input  wire          reset,
 
 
-    input  wire          sampleclk,
-    input  wire          signal_in,
+    input  wire          timerclk,
+    input  wire          trigger_in,
 
     //Serial interface
     input  wire          clk_usb,
@@ -18,27 +18,23 @@ module digital_edge_detector (
 
 
     output wire          trigger,
-    output reg [5:0]     led
+    output reg [5:0]     debug
 );
 
-    `define DIGITAL_EDGE_DETECTOR_CFG 49
-
-    `define EDGE_SENSITIVITY    0
-
-    `define LOW_TO_HIGH         0
-    `define HIGH_TO_LOW         1
+    `define DELAY_MODULE_DELAY 39
 
     reg triggered;
-    reg signal_in_r;
+    reg counting;
 
-    reg [7:0] reg_config;
+    reg [31:0] reg_delay_cycles;
+    reg [31:0] reg_counter = 32'd1;
     
     always @(posedge clk_usb) begin
         if (reg_write) begin
             case (reg_cmd)
-                `DIGITAL_EDGE_DETECTOR_CFG: begin 
-                    reg_config <= reg_data_in; // read only 1 byte
-                    led <= ~reg_config[4:0];
+                `DELAY_MODULE_DELAY: begin 
+                    reg_delay_cycles[reg_bytecount*8 +: 8] <= reg_data_in; // read only 4 byte
+                    debug <= ~reg_data_in[5:0];
                 end
                 default: ;
             endcase
@@ -48,7 +44,7 @@ module digital_edge_detector (
     always @(*) begin
         if (reg_read) begin
             case (reg_cmd)
-                `DIGITAL_EDGE_DETECTOR_CFG: reg_data_out <= reg_config; // read only 1 byte
+                `DELAY_MODULE_DELAY: reg_data_out <= reg_delay_cycles[reg_bytecount*8 +: 8]; // write only 4 byte
                 default: reg_data_out <= 8'd0;
             endcase
         end
@@ -56,16 +52,20 @@ module digital_edge_detector (
             reg_data_out <= 8'd0;
     end
 
-    always @(posedge sampleclk) begin
-        signal_in_r <= signal_in;
-        
-        case (reg_config[`EDGE_SENSITIVITY])
-            `LOW_TO_HIGH : 
-                triggered <= ~signal_in_r && signal_in; 
+    always @(posedge timerclk) begin
+        triggered <= 0;
 
-            `HIGH_TO_LOW : 
-                triggered <= signal_in_r && ~signal_in;
-        endcase
+        if (counting) begin
+            reg_counter <= reg_counter + 32'd1;
+
+            if (reg_counter == reg_delay_cycles) begin
+                triggered   <= 1;
+                counting    <= 0;
+                reg_counter <= 32'd0;
+            end
+        end
+        else
+            counting <= trigger_in;
     end
 
     assign trigger = triggered;

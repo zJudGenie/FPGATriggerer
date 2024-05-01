@@ -1,5 +1,7 @@
 `timescale 1 ns / 1 ps
 `default_nettype none
+`include "commands.v"
+
 module delay_module (
     input  wire          reset,
 
@@ -20,8 +22,6 @@ module delay_module (
     output wire          trigger,
     output reg [5:0]     debug
 );
-
-    `define DELAY_MODULE_DELAY 39
 
     reg triggered;
     reg counting;

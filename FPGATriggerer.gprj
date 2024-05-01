@@ -6,6 +6,7 @@
     <Device name="GW1NR-9C" pn="GW1NR-LV9QN88PC6/I5">gw1nr9c-004</Device>
     <FileList>
         <File path="src/cmd_handler.v" type="file.verilog" enable="1"/>
+        <File path="src/commands.v" type="file.verilog" enable="1"/>
         <File path="src/delay_module.v" type="file.verilog" enable="1"/>
         <File path="src/digital_edge_detector.v" type="file.verilog" enable="1"/>
         <File path="src/gowin_rpll/gowin_rpll.v" type="file.verilog" enable="1"/>

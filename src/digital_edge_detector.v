@@ -1,5 +1,7 @@
 `timescale 1 ns / 1 ps
 `default_nettype none
+`include "commands.v"
+
 module digital_edge_detector (
     input  wire          reset,
 
@@ -21,9 +23,12 @@ module digital_edge_detector (
     output reg [5:0]     led
 );
 
-    `define DIGITAL_EDGE_DETECTOR_CFG 49
-
     `define EDGE_SENSITIVITY    0
+
+    // [X X X X X X X E]
+    // E = Edge Sensitivity
+    //   \ 0 Low to High  
+    //   \ 1 Low to High  
 
     `define LOW_TO_HIGH         0
     `define HIGH_TO_LOW         1

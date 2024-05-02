@@ -23,18 +23,27 @@ module delay_module (
     output reg [5:0]     debug
 );
 
-    reg triggered;
-    reg counting;
+    `define STATE_IDLE          0   // Wait to be armed
+    `define STATE_WAIT_TRIGIN   1   // Armed, wait an input trigger
+    `define STATE_COUNTING      2   // Count until delay_cycles
+    `define STATE_DELAY_EXP     3   // Delay expired, back to IDLE
 
-    reg [31:0] reg_delay_cycles;
-    reg [31:0] reg_counter = 32'd1;
+    reg [2:0] fsm_state = `STATE_IDLE;
+
+    reg triggered   = 0;
+    reg armed       = 0;
+
+    reg [23:0] reg_delay_cycles;
+    reg [23:0] reg_counter = 32'd1;
     
     always @(posedge clk_usb) begin
         if (reg_write) begin
             case (reg_cmd)
                 `DELAY_MODULE_DELAY: begin 
-                    reg_delay_cycles[reg_bytecount*8 +: 8] <= reg_data_in; // read only 4 byte
-                    debug <= ~reg_data_in[5:0];
+                    reg_delay_cycles[reg_bytecount*8 +: 8] <= reg_data_in; // read only 3 byte
+                end
+                `DELAY_MODULE_ARM: begin 
+                    armed <= reg_data_in[0];
                 end
                 default: ;
             endcase
@@ -44,7 +53,7 @@ module delay_module (
     always @(*) begin
         if (reg_read) begin
             case (reg_cmd)
-                `DELAY_MODULE_DELAY: reg_data_out <= reg_delay_cycles[reg_bytecount*8 +: 8]; // write only 4 byte
+                `DELAY_MODULE_DELAY: reg_data_out <= reg_delay_cycles[reg_bytecount*8 +: 8]; // write only 3 byte
                 default: reg_data_out <= 8'd0;
             endcase
         end
@@ -53,19 +62,39 @@ module delay_module (
     end
 
     always @(posedge timerclk) begin
-        triggered <= 0;
+        debug[2:0] <= ~fsm_state;
 
-        if (counting) begin
-            reg_counter <= reg_counter + 32'd1;
+        case (fsm_state)
 
-            if (reg_counter == reg_delay_cycles) begin
-                triggered   <= 1;
-                counting    <= 0;
-                reg_counter <= 32'd0;
+            `STATE_IDLE: begin
+                triggered   <= 0;
+                reg_counter <= 24'd1;
+
+                if (armed)
+                    fsm_state <= `STATE_WAIT_TRIGIN;
             end
-        end
-        else
-            counting <= trigger_in;
+
+            `STATE_WAIT_TRIGIN: begin
+                if (trigger_in)
+                    fsm_state <= `STATE_COUNTING;
+            end
+
+            `STATE_COUNTING: begin
+                if (reg_counter == reg_delay_cycles) begin
+                    fsm_state <= `STATE_DELAY_EXP;
+                end
+
+                reg_counter <= reg_counter + 24'd1;
+            end
+
+            `STATE_DELAY_EXP: begin
+                triggered <= 1;
+
+                fsm_state <= `STATE_IDLE;
+            end
+
+            default: ;
+        endcase
     end
 
     assign trigger = triggered;

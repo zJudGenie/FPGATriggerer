@@ -73,14 +73,14 @@ module cmd_handler (
 
                     // After reading two bytes of data_len we process the command
                     if (curr_data_len_byte == 1) begin
-                        // data_len has been fully read, decrement by 1 as reg_bytecount starts from 0
-                        data_len <= data_len - 16'd1;
-
                         case (cmd_mode)
                             `MODE_READ:     handler_state <= `STATE_WRITE_BYTES;
                             `MODE_WRITE:    handler_state <= `STATE_READ_BYTES;
                             default:        handler_state <= `STATE_WAIT_HEADER;
                         endcase
+
+                         // data_len has been fully read, decrement by 1 as reg_bytecount starts from 0
+                        data_len <= data_len - 16'd1;
                     end
 
                     curr_data_len_byte <= curr_data_len_byte + 1'd1;

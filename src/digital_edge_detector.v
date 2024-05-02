@@ -27,8 +27,8 @@ module digital_edge_detector (
 
     // [X X X X X X X E]
     // E = Edge Sensitivity
-    //   \ 0 Low to High  
-    //   \ 1 Low to High  
+    //      0 = Low to High  
+    //      1 = High to Low  
 
     `define LOW_TO_HIGH         0
     `define HIGH_TO_LOW         1

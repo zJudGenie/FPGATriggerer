@@ -19,8 +19,7 @@ module digital_edge_detector (
     input  wire          reg_write,     // Write flag
 
 
-    output wire          trigger,
-    output reg [5:0]     led
+    output wire          trigger
 );
 
     `define EDGE_SENSITIVITY    0
@@ -43,7 +42,6 @@ module digital_edge_detector (
             case (reg_cmd)
                 `DIGITAL_EDGE_DETECTOR_CFG: begin 
                     reg_config <= reg_data_in; // read only 1 byte
-                    led <= ~reg_config[4:0];
                 end
                 default: ;
             endcase

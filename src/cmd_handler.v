@@ -10,9 +10,7 @@ module cmd_handler (
     output reg  [7:0]    reg_data_in,   // Data read from serial after header
     input  wire [7:0]    reg_data_out,  // Data to write to serial
     output reg           reg_read,      // Read flag
-    output reg           reg_write,     // Write flag
-
-    output reg [5:0]     debug
+    output reg           reg_write     // Write flag
 );
 
     `define CMD_MODE_MASK   8'b11_000000
@@ -34,11 +32,15 @@ module cmd_handler (
     reg         curr_data_len_byte;
 
     always @(posedge clk_usb) begin
-        // debug
-        debug[2:0] <= handler_state;
-        debug[4:3] <= cmd_mode;
-
         case (handler_state)
+
+            // Reset write and read flags to avoid bytes being overwritten
+            `STATE_WAIT_HEADER: begin
+                reg_write       <= 0;
+                reg_read        <= 0;
+            end
+
+            // TODO implementation to be completed
             `STATE_WRITE_BYTES: begin
                 //reg_usb_data_out <= reg_data_out;
                 reg_read <= 1; // I want to read data from registers
@@ -52,7 +54,7 @@ module cmd_handler (
             default: ;
         endcase
 
-        // Serial reader FSM
+        // Serial reader FSM that evolve on each byte received
         if (byte_ready) begin
             case (handler_state)
                 `STATE_WAIT_HEADER: begin
@@ -63,8 +65,6 @@ module cmd_handler (
                     curr_data_len_byte  <= 2'd0;
 
                     reg_bytecount   <= 0;
-                    reg_write       <= 0;
-                    reg_read        <= 0;
                     
                     handler_state   <= `STATE_READ_DATA_LEN;
                 end
@@ -89,11 +89,10 @@ module cmd_handler (
                     reg_data_in <= reg_usb_data_in;
                     reg_write <= 1; // Data can now be written to the registers
                     
-                    if (reg_bytecount == data_len)
+                    if (reg_bytecount == data_len) begin
                         handler_state <= `STATE_WAIT_HEADER;
-                    else 
-                    begin
-                        handler_state <= `STATE_READ_BYTES;
+                    end 
+                    else if (reg_write == 1) begin //delay by 1 clock cycle the bytecount increment to avoid starting to write to byte 1
                         reg_bytecount <= reg_bytecount + 16'd1;
                     end
                     

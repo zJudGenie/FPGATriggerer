@@ -45,10 +45,6 @@ always @(posedge clkin) begin
     reg_data_out <= data_read_1 | data_read_2;
 end
 
-wire [5:0] debug_led;
-wire [5:0] dummy_led;
-wire [5:0] dummy_led1;
-
 cmd_handler cmd_reader(
     clkin,
 
@@ -62,9 +58,7 @@ cmd_handler cmd_reader(
     reg_data_in,
     reg_data_out,
     reg_read,
-    reg_write,
-
-    dummy_led
+    reg_write
 );
 
 wire trigger_in;
@@ -83,8 +77,7 @@ digital_edge_detector sampler(
     reg_read,
     reg_write,
 
-    trigger_in,
-    dummy_led1
+    trigger_in
 );
 
 delay_module delayer(
@@ -101,10 +94,9 @@ delay_module delayer(
     reg_read,
     reg_write,
 
-    trigger_out,
-    debug_led
+    trigger_out
 );
 
-assign led = debug_led;
+assign led = ~(6'd0);
 
 endmodule

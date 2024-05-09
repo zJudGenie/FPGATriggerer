@@ -19,8 +19,7 @@ module delay_module (
     input  wire          reg_write,     // Write flag
 
 
-    output wire          trigger,
-    output reg [5:0]     debug
+    output wire          trigger
 );
 
     `define STATE_IDLE          0   // Wait to be armed
@@ -62,7 +61,6 @@ module delay_module (
     end
 
     always @(posedge timerclk) begin
-        debug[2:0] <= ~fsm_state;
 
         case (fsm_state)
 

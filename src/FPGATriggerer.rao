@@ -2,4 +2,128 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
+    <AoCore index="0" sample_clock="delayer/clk_usb" trig_type="0" storage_depth="512" window_num="1" capture_amount="512" implementation="0" trigger_pos="0" module_name="led" force_trigger_by_falling_edge="false">
+        <SignalList>
+            <Bus name="reg_data_in[7:0]">
+                <Signal>reg_data_in[7]</Signal>
+                <Signal>reg_data_in[6]</Signal>
+                <Signal>reg_data_in[5]</Signal>
+                <Signal>reg_data_in[4]</Signal>
+                <Signal>reg_data_in[3]</Signal>
+                <Signal>reg_data_in[2]</Signal>
+                <Signal>reg_data_in[1]</Signal>
+                <Signal>reg_data_in[0]</Signal>
+            </Bus>
+            <Bus name="delayer/reg_delay_cycles[23:0]">
+                <Signal>delayer/reg_delay_cycles[23]</Signal>
+                <Signal>delayer/reg_delay_cycles[22]</Signal>
+                <Signal>delayer/reg_delay_cycles[21]</Signal>
+                <Signal>delayer/reg_delay_cycles[20]</Signal>
+                <Signal>delayer/reg_delay_cycles[19]</Signal>
+                <Signal>delayer/reg_delay_cycles[18]</Signal>
+                <Signal>delayer/reg_delay_cycles[17]</Signal>
+                <Signal>delayer/reg_delay_cycles[16]</Signal>
+                <Signal>delayer/reg_delay_cycles[15]</Signal>
+                <Signal>delayer/reg_delay_cycles[14]</Signal>
+                <Signal>delayer/reg_delay_cycles[13]</Signal>
+                <Signal>delayer/reg_delay_cycles[12]</Signal>
+                <Signal>delayer/reg_delay_cycles[11]</Signal>
+                <Signal>delayer/reg_delay_cycles[10]</Signal>
+                <Signal>delayer/reg_delay_cycles[9]</Signal>
+                <Signal>delayer/reg_delay_cycles[8]</Signal>
+                <Signal>delayer/reg_delay_cycles[7]</Signal>
+                <Signal>delayer/reg_delay_cycles[6]</Signal>
+                <Signal>delayer/reg_delay_cycles[5]</Signal>
+                <Signal>delayer/reg_delay_cycles[4]</Signal>
+                <Signal>delayer/reg_delay_cycles[3]</Signal>
+                <Signal>delayer/reg_delay_cycles[2]</Signal>
+                <Signal>delayer/reg_delay_cycles[1]</Signal>
+                <Signal>delayer/reg_delay_cycles[0]</Signal>
+            </Bus>
+            <Bus name="reg_bytecount[15:0]">
+                <Signal>reg_bytecount[15]</Signal>
+                <Signal>reg_bytecount[14]</Signal>
+                <Signal>reg_bytecount[13]</Signal>
+                <Signal>reg_bytecount[12]</Signal>
+                <Signal>reg_bytecount[11]</Signal>
+                <Signal>reg_bytecount[10]</Signal>
+                <Signal>reg_bytecount[9]</Signal>
+                <Signal>reg_bytecount[8]</Signal>
+                <Signal>reg_bytecount[7]</Signal>
+                <Signal>reg_bytecount[6]</Signal>
+                <Signal>reg_bytecount[5]</Signal>
+                <Signal>reg_bytecount[4]</Signal>
+                <Signal>reg_bytecount[3]</Signal>
+                <Signal>reg_bytecount[2]</Signal>
+                <Signal>reg_bytecount[1]</Signal>
+                <Signal>reg_bytecount[0]</Signal>
+            </Bus>
+            <Signal>delayer/reg_write</Signal>
+        </SignalList>
+        <Triggers>
+            <Trigger index="0">
+                <SignalList>
+                    <Signal>delayer/reg_write</Signal>
+                </SignalList>
+            </Trigger>
+            <Trigger index="1">
+                <SignalList>
+                    <Bus restorename="reg_bytecount[15:0]">
+                        <Signal>reg_bytecount[15]</Signal>
+                        <Signal>reg_bytecount[14]</Signal>
+                        <Signal>reg_bytecount[13]</Signal>
+                        <Signal>reg_bytecount[12]</Signal>
+                        <Signal>reg_bytecount[11]</Signal>
+                        <Signal>reg_bytecount[10]</Signal>
+                        <Signal>reg_bytecount[9]</Signal>
+                        <Signal>reg_bytecount[8]</Signal>
+                        <Signal>reg_bytecount[7]</Signal>
+                        <Signal>reg_bytecount[6]</Signal>
+                        <Signal>reg_bytecount[5]</Signal>
+                        <Signal>reg_bytecount[4]</Signal>
+                        <Signal>reg_bytecount[3]</Signal>
+                        <Signal>reg_bytecount[2]</Signal>
+                        <Signal>reg_bytecount[1]</Signal>
+                        <Signal>reg_bytecount[0]</Signal>
+                    </Bus>
+                </SignalList>
+            </Trigger>
+            <Trigger index="2"/>
+            <Trigger index="3"/>
+            <Trigger index="4"/>
+            <Trigger index="5"/>
+            <Trigger index="6"/>
+            <Trigger index="7"/>
+            <Trigger index="8"/>
+            <Trigger index="9"/>
+            <Trigger index="10"/>
+            <Trigger index="11"/>
+            <Trigger index="12"/>
+            <Trigger index="13"/>
+            <Trigger index="14"/>
+            <Trigger index="15"/>
+        </Triggers>
+        <MatchUnits>
+            <MatchUnit index="0" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="1" value1="0" trigger="0"/>
+            <MatchUnit index="1" enabled="1" match_type="2" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="3" value0="0000000000000100" value1="0000000000000000" trigger="1"/>
+            <MatchUnit index="2" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="4" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="5" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="6" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="7" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="8" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="9" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="10" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="11" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="12" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="13" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="14" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="15" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+        </MatchUnits>
+        <Expressions type="Static">
+            <Expression>M1</Expression>
+        </Expressions>
+    </AoCore>
+    <GAO_ID>0100101010011100</GAO_ID>
 </GAO_CONFIG>

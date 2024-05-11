@@ -33,7 +33,7 @@ module delay_module (
     reg armed       = 0;
 
     reg [23:0] reg_delay_cycles;
-    reg [23:0] reg_counter = 32'd1;
+    reg [23:0] reg_counter = 24'd1;
     
     always @(posedge clk_usb) begin
         if (reg_write) begin

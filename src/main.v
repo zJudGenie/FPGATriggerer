@@ -41,8 +41,9 @@ wire        reg_write;
 
 wire [7:0]  data_read_1;
 wire [7:0]  data_read_2;
+wire [7:0]  data_read_3;
 always @(posedge clkin) begin
-    reg_data_out <= data_read_1 | data_read_2;
+    reg_data_out <= data_read_1 | data_read_2 | data_read_3;
 end
 
 cmd_handler cmd_reader(
@@ -80,6 +81,8 @@ digital_edge_detector sampler(
     trigger_in
 );
 
+wire delayer_out;
+
 delay_module delayer(
     reset,
 
@@ -91,6 +94,23 @@ delay_module delayer(
     reg_bytecount,
     reg_data_in,
     data_read_2,
+    reg_read,
+    reg_write,
+
+    delayer_out
+);
+
+pulse_extender extender(
+    reset,
+
+    clkin_pll,
+    delayer_out,
+
+    clkin,
+    reg_cmd,
+    reg_bytecount,
+    reg_data_in,
+    data_read_3,
     reg_read,
     reg_write,
 

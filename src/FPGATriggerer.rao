@@ -2,17 +2,48 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="delayer/clk_usb" trig_type="0" storage_depth="512" window_num="1" capture_amount="512" implementation="0" trigger_pos="0" module_name="led" force_trigger_by_falling_edge="false">
+    <AoCore index="0" sample_clock="clkin" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="0" module_name="led" force_trigger_by_falling_edge="false">
         <SignalList>
-            <Bus name="reg_data_in[7:0]">
-                <Signal>reg_data_in[7]</Signal>
-                <Signal>reg_data_in[6]</Signal>
-                <Signal>reg_data_in[5]</Signal>
-                <Signal>reg_data_in[4]</Signal>
-                <Signal>reg_data_in[3]</Signal>
-                <Signal>reg_data_in[2]</Signal>
-                <Signal>reg_data_in[1]</Signal>
-                <Signal>reg_data_in[0]</Signal>
+            <Bus name="cmd_reader/handler_state[2:0]">
+                <Signal>cmd_reader/handler_state[2]</Signal>
+                <Signal>cmd_reader/handler_state[1]</Signal>
+                <Signal>cmd_reader/handler_state[0]</Signal>
+            </Bus>
+            <Bus name="cmd_reader/data_len[15:0]">
+                <Signal>cmd_reader/data_len[15]</Signal>
+                <Signal>cmd_reader/data_len[14]</Signal>
+                <Signal>cmd_reader/data_len[13]</Signal>
+                <Signal>cmd_reader/data_len[12]</Signal>
+                <Signal>cmd_reader/data_len[11]</Signal>
+                <Signal>cmd_reader/data_len[10]</Signal>
+                <Signal>cmd_reader/data_len[9]</Signal>
+                <Signal>cmd_reader/data_len[8]</Signal>
+                <Signal>cmd_reader/data_len[7]</Signal>
+                <Signal>cmd_reader/data_len[6]</Signal>
+                <Signal>cmd_reader/data_len[5]</Signal>
+                <Signal>cmd_reader/data_len[4]</Signal>
+                <Signal>cmd_reader/data_len[3]</Signal>
+                <Signal>cmd_reader/data_len[2]</Signal>
+                <Signal>cmd_reader/data_len[1]</Signal>
+                <Signal>cmd_reader/data_len[0]</Signal>
+            </Bus>
+            <Bus name="delayer/reg_bytecount[15:0]">
+                <Signal>delayer/reg_bytecount[15]</Signal>
+                <Signal>delayer/reg_bytecount[14]</Signal>
+                <Signal>delayer/reg_bytecount[13]</Signal>
+                <Signal>delayer/reg_bytecount[12]</Signal>
+                <Signal>delayer/reg_bytecount[11]</Signal>
+                <Signal>delayer/reg_bytecount[10]</Signal>
+                <Signal>delayer/reg_bytecount[9]</Signal>
+                <Signal>delayer/reg_bytecount[8]</Signal>
+                <Signal>delayer/reg_bytecount[7]</Signal>
+                <Signal>delayer/reg_bytecount[6]</Signal>
+                <Signal>delayer/reg_bytecount[5]</Signal>
+                <Signal>delayer/reg_bytecount[4]</Signal>
+                <Signal>delayer/reg_bytecount[3]</Signal>
+                <Signal>delayer/reg_bytecount[2]</Signal>
+                <Signal>delayer/reg_bytecount[1]</Signal>
+                <Signal>delayer/reg_bytecount[0]</Signal>
             </Bus>
             <Bus name="delayer/reg_delay_cycles[23:0]">
                 <Signal>delayer/reg_delay_cycles[23]</Signal>
@@ -40,51 +71,32 @@
                 <Signal>delayer/reg_delay_cycles[1]</Signal>
                 <Signal>delayer/reg_delay_cycles[0]</Signal>
             </Bus>
-            <Bus name="reg_bytecount[15:0]">
-                <Signal>reg_bytecount[15]</Signal>
-                <Signal>reg_bytecount[14]</Signal>
-                <Signal>reg_bytecount[13]</Signal>
-                <Signal>reg_bytecount[12]</Signal>
-                <Signal>reg_bytecount[11]</Signal>
-                <Signal>reg_bytecount[10]</Signal>
-                <Signal>reg_bytecount[9]</Signal>
-                <Signal>reg_bytecount[8]</Signal>
-                <Signal>reg_bytecount[7]</Signal>
-                <Signal>reg_bytecount[6]</Signal>
-                <Signal>reg_bytecount[5]</Signal>
-                <Signal>reg_bytecount[4]</Signal>
-                <Signal>reg_bytecount[3]</Signal>
-                <Signal>reg_bytecount[2]</Signal>
-                <Signal>reg_bytecount[1]</Signal>
-                <Signal>reg_bytecount[0]</Signal>
-            </Bus>
-            <Signal>delayer/reg_write</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
                 <SignalList>
-                    <Signal>delayer/reg_write</Signal>
+                    <Signal>cmd_reader/reg_write</Signal>
                 </SignalList>
             </Trigger>
             <Trigger index="1">
                 <SignalList>
-                    <Bus restorename="reg_bytecount[15:0]">
-                        <Signal>reg_bytecount[15]</Signal>
-                        <Signal>reg_bytecount[14]</Signal>
-                        <Signal>reg_bytecount[13]</Signal>
-                        <Signal>reg_bytecount[12]</Signal>
-                        <Signal>reg_bytecount[11]</Signal>
-                        <Signal>reg_bytecount[10]</Signal>
-                        <Signal>reg_bytecount[9]</Signal>
-                        <Signal>reg_bytecount[8]</Signal>
-                        <Signal>reg_bytecount[7]</Signal>
-                        <Signal>reg_bytecount[6]</Signal>
-                        <Signal>reg_bytecount[5]</Signal>
-                        <Signal>reg_bytecount[4]</Signal>
-                        <Signal>reg_bytecount[3]</Signal>
-                        <Signal>reg_bytecount[2]</Signal>
-                        <Signal>reg_bytecount[1]</Signal>
-                        <Signal>reg_bytecount[0]</Signal>
+                    <Bus restorename="cmd_reader/reg_bytecount[15:0]">
+                        <Signal>cmd_reader/reg_bytecount[15]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[14]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[13]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[12]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[11]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[10]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[9]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[8]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[7]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[6]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[5]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[4]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[3]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[2]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[1]</Signal>
+                        <Signal>cmd_reader/reg_bytecount[0]</Signal>
                     </Bus>
                 </SignalList>
             </Trigger>
@@ -104,7 +116,7 @@
             <Trigger index="15"/>
         </Triggers>
         <MatchUnits>
-            <MatchUnit index="0" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="1" value1="0" trigger="0"/>
+            <MatchUnit index="0" enabled="1" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="1" value1="0" trigger="0"/>
             <MatchUnit index="1" enabled="1" match_type="2" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="3" value0="0000000000000100" value1="0000000000000000" trigger="1"/>
             <MatchUnit index="2" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
@@ -122,8 +134,8 @@
             <MatchUnit index="15" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
         </MatchUnits>
         <Expressions type="Static">
-            <Expression>M1</Expression>
+            <Expression>M0|M1</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0100101010011100</GAO_ID>
+    <GAO_ID>0111001011101010</GAO_ID>
 </GAO_CONFIG>

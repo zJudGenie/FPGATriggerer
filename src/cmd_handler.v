@@ -34,6 +34,11 @@ module cmd_handler (
     always @(posedge clk_usb) begin
         case (handler_state)
 
+            `STATE_WAIT_HEADER: begin
+                reg_read        <= 0;
+                reg_write       <= 0;
+            end
+
             // Disables the reg_write flag at the end of the clock cycle after reading reg_data_in from modules
             `STATE_READ_BYTES: begin
                 if (reg_write == 1) begin //delay by 1 clock cycle the bytecount increment to avoid starting to write to byte 1

@@ -9,24 +9,6 @@
                 <Signal>cmd_reader/handler_state[1]</Signal>
                 <Signal>cmd_reader/handler_state[0]</Signal>
             </Bus>
-            <Bus name="cmd_reader/data_len[15:0]">
-                <Signal>cmd_reader/data_len[15]</Signal>
-                <Signal>cmd_reader/data_len[14]</Signal>
-                <Signal>cmd_reader/data_len[13]</Signal>
-                <Signal>cmd_reader/data_len[12]</Signal>
-                <Signal>cmd_reader/data_len[11]</Signal>
-                <Signal>cmd_reader/data_len[10]</Signal>
-                <Signal>cmd_reader/data_len[9]</Signal>
-                <Signal>cmd_reader/data_len[8]</Signal>
-                <Signal>cmd_reader/data_len[7]</Signal>
-                <Signal>cmd_reader/data_len[6]</Signal>
-                <Signal>cmd_reader/data_len[5]</Signal>
-                <Signal>cmd_reader/data_len[4]</Signal>
-                <Signal>cmd_reader/data_len[3]</Signal>
-                <Signal>cmd_reader/data_len[2]</Signal>
-                <Signal>cmd_reader/data_len[1]</Signal>
-                <Signal>cmd_reader/data_len[0]</Signal>
-            </Bus>
             <Bus name="delayer/reg_bytecount[15:0]">
                 <Signal>delayer/reg_bytecount[15]</Signal>
                 <Signal>delayer/reg_bytecount[14]</Signal>
@@ -71,6 +53,7 @@
                 <Signal>delayer/reg_delay_cycles[1]</Signal>
                 <Signal>delayer/reg_delay_cycles[0]</Signal>
             </Bus>
+            <Signal>cmd_reader/reg_write</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -137,5 +120,5 @@
             <Expression>M0|M1</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0111001011101010</GAO_ID>
+    <GAO_ID>1110110001011001</GAO_ID>
 </GAO_CONFIG>

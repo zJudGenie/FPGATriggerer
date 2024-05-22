@@ -6,7 +6,8 @@ module led(
     output uart_tx,
 
     output wire [5:0] led,
-    output trigger_out
+    output trigger_out,
+    output target_reset
 );
 
 wire reset = 0;
@@ -20,13 +21,11 @@ Gowin_rPLL pll(
 
 wire [7:0] reg_usb_data_in;
 wire byte_ready;
-//wire uart_led;
 
 uart u(
     clkin,
     uart_rx,
     uart_tx,
-    //uart_led,
 
     byte_ready,
     reg_usb_data_in
@@ -39,11 +38,13 @@ reg  [7:0]  reg_data_out;
 wire        reg_read;
 wire        reg_write;
 
+// Temporary solution, reading from register is not implemented completely
 wire [7:0]  data_read_1;
 wire [7:0]  data_read_2;
 wire [7:0]  data_read_3;
+wire [7:0]  data_read_4;
 always @(posedge clkin) begin
-    reg_data_out <= data_read_1 | data_read_2 | data_read_3;
+    reg_data_out <= data_read_1 | data_read_2 | data_read_3 | data_read_4;
 end
 
 cmd_handler cmd_reader(
@@ -67,6 +68,7 @@ wire trigger_in;
 digital_edge_detector sampler(
     reset,
 
+    // Inputs
     clkin_pll,
     signal_in,
 
@@ -78,6 +80,7 @@ digital_edge_detector sampler(
     reg_read,
     reg_write,
 
+    // Outputs
     trigger_in
 );
 
@@ -86,6 +89,7 @@ wire delayer_out;
 delay_module delayer(
     reset,
 
+    // Inputs
     clkin_pll,
     trigger_in,
 
@@ -97,12 +101,14 @@ delay_module delayer(
     reg_read,
     reg_write,
 
+    // Outputs
     delayer_out
 );
 
 pulse_extender extender(
     reset,
 
+    // Inputs
     clkin_pll,
     delayer_out,
 
@@ -114,7 +120,23 @@ pulse_extender extender(
     reg_read,
     reg_write,
 
+    // Outputs
     trigger_out
+);
+
+target_resetter resetter(
+    reset,
+
+    clkin,
+    reg_cmd,
+    reg_bytecount,
+    reg_data_in,
+    data_read_4,
+    reg_read,
+    reg_write,
+
+    // Outputs
+    target_reset
 );
 
 assign led = ~(6'd0);

@@ -7,3 +7,6 @@
 
 // Pulse extender module commands
 `define PULSE_EXTENDER_CYCLES           24
+
+// Target resetter module commands
+`define TARGET_RESETTER_RESET           32

@@ -19,7 +19,7 @@ module pulse_extender (
     input  wire          reg_write,     // Write flag
 
 
-    output reg          signal_out
+    output reg           signal_out
 );
 
     `define STATE_WAIT_PULSE    0   // Count until delay_cycles

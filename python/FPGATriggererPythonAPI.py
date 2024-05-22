@@ -18,6 +18,8 @@ class Command(Enum):
     
     PULSE_EXTENDER_CYCLES       = (24, 2)
 
+    TARGET_RESETTER_RESET       = (32, 1)
+
     def __init__(self, addr, reg_size) -> None:
         self.addr = addr
         self.reg_size = reg_size
@@ -156,4 +158,27 @@ class PulseExtenderModule():
             Mode.WRITE, 
             Command.PULSE_EXTENDER_CYCLES, 
             value.to_bytes(Command.PULSE_EXTENDER_CYCLES.reg_size, byteorder='little', signed=False)
+        )
+
+
+class TargetResetterModule():
+
+    def __init__(self, triggerer_api: FPGATriggererAPI) -> None:
+        self.triggerer_api = triggerer_api
+        
+        self._reset = False
+
+    @property
+    def reset(self):
+        return self._reset
+
+    @reset.setter
+    def reset(self, value):
+        assert isinstance(value, bool), "value must be a bool"
+
+        self._reset = value
+        self.triggerer_api.send_command(
+            Mode.WRITE, 
+            Command.TARGET_RESETTER_RESET, 
+            value.to_bytes(Command.TARGET_RESETTER_RESET.reg_size, byteorder='little', signed=False)
         )

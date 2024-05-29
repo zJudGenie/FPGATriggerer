@@ -32,8 +32,18 @@ module digital_edge_detector (
     `define LOW_TO_HIGH         0
     `define HIGH_TO_LOW         1
 
+
+    `define STATE_LISTENING     0   // Sampling input signals
+    `define STATE_HOLDINGOFF    1   // Ignore the input
+
+    reg [1:0] fsm_state = `STATE_LISTENING;
+
     reg triggered;
     reg signal_in_r;
+
+    // 2 bytes: For how many clock cycles ignore the input
+    reg [15:0] reg_holdoff_cycles = 16'd0;
+    reg [15:0] reg_counter = 16'd1;
 
     reg [7:0] reg_config;
     
@@ -42,6 +52,9 @@ module digital_edge_detector (
             case (reg_cmd)
                 `DIGITAL_EDGE_DETECTOR_CFG: begin 
                     reg_config <= reg_data_in; // read only 1 byte
+                end
+                `DIGITAL_EDGE_DETECTOR_HOLDOFF: begin 
+                    reg_holdoff_cycles[reg_bytecount*8 +: 8] <= reg_data_in; // read only 2 byte
                 end
                 default: ;
             endcase
@@ -52,6 +65,7 @@ module digital_edge_detector (
         if (reg_read) begin
             case (reg_cmd)
                 `DIGITAL_EDGE_DETECTOR_CFG: reg_data_out <= reg_config; // read only 1 byte
+                `DIGITAL_EDGE_DETECTOR_HOLDOFF: reg_data_out <= reg_holdoff_cycles[reg_bytecount*8 +: 8]; // read only 2 byte
                 default: reg_data_out <= 8'd0;
             endcase
         end
@@ -61,13 +75,32 @@ module digital_edge_detector (
 
     always @(posedge sampleclk) begin
         signal_in_r <= signal_in;
-        
-        case (reg_config[`EDGE_SENSITIVITY])
-            `LOW_TO_HIGH : 
-                triggered <= ~signal_in_r && signal_in; 
 
-            `HIGH_TO_LOW : 
-                triggered <= signal_in_r && ~signal_in;
+        case (fsm_state)
+
+            `STATE_LISTENING: begin
+                reg_counter = 16'd0;
+
+                case (reg_config[`EDGE_SENSITIVITY])
+                    `LOW_TO_HIGH : 
+                        triggered <= ~signal_in_r && signal_in; 
+
+                    `HIGH_TO_LOW : 
+                        triggered <= signal_in_r && ~signal_in;
+                endcase
+
+                if (reg_holdoff_cycles != 0 && triggered)
+                    fsm_state <= `STATE_HOLDINGOFF;
+            end
+
+            `STATE_HOLDINGOFF: begin
+                if (reg_counter == reg_holdoff_cycles)
+                    fsm_state <= `STATE_LISTENING;
+
+                reg_counter <= reg_counter + 16'd1;
+            end
+
+            default: ;
         endcase
     end
 

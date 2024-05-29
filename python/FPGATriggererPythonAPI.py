@@ -14,7 +14,8 @@ class Command(Enum):
     DELAY_MODULE_DELAY  = (8, 3)
     DELAY_MODULE_ARM    = (9, 1)
 
-    DIGITAL_EDGE_DETECTOR_CFG   = (16, 1)
+    DIGITAL_EDGE_DETECTOR_CFG       = (16, 1)
+    DIGITAL_EDGE_DETECTOR_HOLDOFF   = (17, 2)
     
     PULSE_EXTENDER_CYCLES       = (24, 2)
 
@@ -101,6 +102,7 @@ class DigitalEdgeDetector():
         self.triggerer_api = triggerer_api
         
         self._config = 0
+        self._holdoff_cycles = 0
 
     @property
     def edge_sensitivity(self):
@@ -120,6 +122,20 @@ class DigitalEdgeDetector():
     def armed(self, value):
         self._change_property(DigitalEdgeDetector.ARMED, value)
         self._send_config()
+
+
+    @property
+    def holdoff_cycles(self):
+        return self._holdoff_cycles
+
+    @holdoff_cycles.setter
+    def holdoff_cycles(self, value):
+        self._holdoff_cycles = value
+        self.triggerer_api.send_command(
+            Mode.WRITE, 
+            Command.DIGITAL_EDGE_DETECTOR_HOLDOFF, 
+            value.to_bytes(Command.DIGITAL_EDGE_DETECTOR_HOLDOFF.reg_size, byteorder='little', signed=False)
+        )
 
 
     def _change_property(self, mask, value: bool):

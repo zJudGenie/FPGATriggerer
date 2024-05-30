@@ -15,7 +15,7 @@ class Command(Enum):
     DELAY_MODULE_ARM    = (9, 1)
 
     DIGITAL_EDGE_DETECTOR_CFG       = (16, 1)
-    DIGITAL_EDGE_DETECTOR_HOLDOFF   = (17, 2)
+    DIGITAL_EDGE_DETECTOR_HOLDOFF   = (17, 3)
     
     PULSE_EXTENDER_CYCLES       = (24, 2)
 

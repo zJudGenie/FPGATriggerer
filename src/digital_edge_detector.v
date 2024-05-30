@@ -19,7 +19,7 @@ module digital_edge_detector (
     input  wire          reg_write,     // Write flag
 
 
-    output wire          trigger
+    output reg           triggered
 );
 
     `define EDGE_SENSITIVITY    0
@@ -38,12 +38,11 @@ module digital_edge_detector (
 
     reg [1:0] fsm_state = `STATE_LISTENING;
 
-    reg triggered;
     reg signal_in_r;
 
-    // 2 bytes: For how many clock cycles ignore the input
-    reg [15:0] reg_holdoff_cycles = 16'd0;
-    reg [15:0] reg_counter = 16'd1;
+    // 3 bytes: For how many clock cycles ignore the input
+    reg [23:0] reg_holdoff_cycles = 24'd1000;
+    reg [23:0] reg_counter = 24'd0;
 
     reg [7:0] reg_config;
     
@@ -79,14 +78,14 @@ module digital_edge_detector (
         case (fsm_state)
 
             `STATE_LISTENING: begin
-                reg_counter = 16'd0;
+                reg_counter <= 24'd0;
 
                 case (reg_config[`EDGE_SENSITIVITY])
-                    `LOW_TO_HIGH : 
-                        triggered <= ~signal_in_r && signal_in; 
+                    `LOW_TO_HIGH:
+                        triggered = ~signal_in_r && signal_in; // blocking assign
 
-                    `HIGH_TO_LOW : 
-                        triggered <= signal_in_r && ~signal_in;
+                    `HIGH_TO_LOW:
+                        triggered = signal_in_r && ~signal_in; // blocking assign
                 endcase
 
                 if (reg_holdoff_cycles != 0 && triggered)
@@ -94,17 +93,19 @@ module digital_edge_detector (
             end
 
             `STATE_HOLDINGOFF: begin
+                triggered <= 0;
+
                 if (reg_counter == reg_holdoff_cycles)
                     fsm_state <= `STATE_LISTENING;
 
-                reg_counter <= reg_counter + 16'd1;
+                reg_counter <= reg_counter + 24'd1;
             end
 
             default: ;
         endcase
     end
 
-    assign trigger = triggered;
+    //assign trigger = triggered;
 
 endmodule
 `default_nettype wire

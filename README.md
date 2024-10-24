@@ -63,17 +63,21 @@ tools(mainly a fast oscilloscope) the project is currently HALTED.
 
 ## Setup
 
-The general block setup is like this:\
+The overall block setup is like this:\
 ![SchematicSetup.png](resources/SchematicSetup.png)
 
 ## Voltage Glitching Setup
 
 To test the project on a real target(ESP32-S3) I assembled the following circuit. We used the
-crowbar technique :\
+crowbar technique :
+<br />
+
 ![Setup.png](resources/Setup.jpg)
 
 ### Results
 
-With the previous setup I managed to get this result but, for a question of time, I didn't manage to
+With the previous setup I was able to achieve this results but, as a matter of time, I was unable to 
 glitch the target in a useful manner.
+<br />
+
 ![VoltageGlitchOscilloComment.jpg](resources%2FVoltageGlitchOscilloComment.jpg)
